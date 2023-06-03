@@ -6,19 +6,37 @@
 <div class="info">
   <div class="info__panel left">
     <div class="info__element hero-health">{{ hero.healthPoint }}</div>
-    <div class="info__element hero-weapon">{{ hero.getWeaponName() }}</div>
+    <div class="info__element hero-weapon">{{ hero.getWeaponName() }} : {{hero.getWeaponDamage()}}</div>
     <div class="info__element hero-active_buff">{{ hero.activeBuff }}</div>
   </div>
-  <div class="info__panel left center">
 
+
+  <div class="info__panel left center">
+    <div class="info__element hero-bag active">
+      <ul>
+        <ng-container *ngFor="let el of hero.bag">
+          <li
+            class="hero-bag__item"
+            *ngIf="el.use"
+            (click)="selectBuff(el)">
+            {{el.name}}
+          </li>
+        </ng-container>
+      </ul>
+    </div>
   </div>
 
   <div class="info__panel right">
     <div class="info__element hero-bag">
       <ul>
-        <li *ngFor="let el of hero.bag">
-          {{el.name}}
-        </li>
+        <ng-container *ngFor="let el of hero.bag">
+          <li
+            class="hero-bag__item"
+            *ngIf="!el.use"
+            (click)="selectBuff(el)">
+            {{el.name}}
+          </li>
+        </ng-container>
       </ul>
     </div>
   </div>
