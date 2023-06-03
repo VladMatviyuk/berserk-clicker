@@ -1,0 +1,44 @@
+.enemy {
+  width: 450px;
+  height: 650px;
+  margin: 0 auto;
+  border: 1px solid darkred;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+
+}
+
+.info {
+  width: 700px;
+  height: 6rem;
+  margin: 2rem;
+  border: 1px solid brown;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  &__panel {
+    display: flex;
+  }
+  &__element {
+    margin: 1rem;
+  }
+
+  .hero-bag {
+    ul {
+      display: flex;
+      list-style-type: none;
+
+      li {
+        margin: 1rem;
+      }
+    }
+  }
+}
+

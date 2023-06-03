@@ -1,0 +1,25 @@
+<div class="enemy" (click)="attack()">
+  <div class="enemy__face">Avatar enemy</div>
+  <div class="enemy__health">{{ gameService.healthPoint }}</div>
+</div>
+
+<div class="info">
+  <div class="info__panel left">
+    <div class="info__element hero-health">{{ hero.healthPoint }}</div>
+    <div class="info__element hero-weapon">{{ hero.getWeaponName() }}</div>
+    <div class="info__element hero-active_buff">{{ hero.activeBuff }}</div>
+  </div>
+  <div class="info__panel left center">
+
+  </div>
+
+  <div class="info__panel right">
+    <div class="info__element hero-bag">
+      <ul>
+        <li *ngFor="let el of hero.bag">
+          {{el.name}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
