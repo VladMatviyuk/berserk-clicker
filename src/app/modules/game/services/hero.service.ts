@@ -1,30 +1,32 @@
 import { Injectable } from '@angular/core';
+import { IBagItem } from "../models/IBag";
+import { BagService } from "./bag.service";
+import { GameStore } from "../game.store";
+import { BehaviorSubject } from "rxjs";
 
-export interface IBagItem  {
-  name: string;
-  avatar: string;
-  buff: string;
-  buffPoint: number;
-  use: boolean;
-  time: number;
-}
+
 @Injectable({
   providedIn: 'root'
 })
 export class HeroService {
 
-  public healthPoint = 100;
+  public healthPoint = this.gameStore.heroHealth.value;
+  public blockDamage: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   public weapon  = [
-    {name: 'stick', avatar: '', damage: 1 }
+    {name: 'stick', avatar: '', damage: 5 }
   ];
   public activeBuff: IBagItem[] = [];
-  public bag = [
-    {name: 'water', avatar: '', buff: 'health', buffPoint: 20, use: false, time: 0},
-    {name: 'selfHarm', avatar: '', buff: 'damage', buffPoint: 40, use: false, time: 2000},
-  ];
+
+  public bag: IBagItem[] = [];
   public weaponBuff = 0;
 
-  constructor() { }
+  constructor(
+    public bagService: BagService,
+    public gameStore: GameStore
+  ) {
+    this.bag = bagService.get();
+  }
 
   private actualWeapon() {
 
@@ -46,7 +48,7 @@ export class HeroService {
   private setBuff(el: IBagItem) {
     switch (el.buff) {
       case 'health':
-        this.healthPoint += el.buffPoint;
+        this.gameStore.heroHealth.next(this.gameStore.heroHealth.value + el.buffPoint);
         break;
       case 'damage':
         this.weaponBuff += el.buffPoint;
@@ -71,5 +73,11 @@ export class HeroService {
     setTimeout(() => {
       this.removeBuff(el)
     }, el.time)
+  }
+
+  getDamage(damage: number) {
+    if(this.blockDamage.value) { return; }
+
+    this.gameStore.heroHealth.next(this.gameStore.heroHealth.value - damage)
   }
 }

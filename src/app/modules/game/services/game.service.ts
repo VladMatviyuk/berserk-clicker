@@ -1,15 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HeroService } from "./hero.service";
+import { EnemyService } from "./enemy.service";
+import { IBagItem } from "../models/IBag";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
 
-  public healthPoint = 100;
-  constructor(private hero: HeroService) { }
+  constructor(
+    private hero: HeroService,
+    private enemyService: EnemyService
+  ) {
+    this.enemyService.setAttack();
+  }
 
+  /**
+  * Урон по противнику
+  */
   public damage() {
-    this.healthPoint -= this.hero.getWeaponDamage();
+    this.enemyService.damage();
+  }
+
+  /**
+   * Использование бафов
+   */
+  public useBuff(el: IBagItem) {
+    this.hero.useBuff(el);
   }
 }

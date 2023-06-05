@@ -1,43 +1,22 @@
-<div class="enemy" (click)="attack()">
-  <div class="enemy__face">Avatar enemy</div>
-  <div class="enemy__health">{{ gameService.healthPoint }}</div>
+<div class="enemy__wrapper">
+  <div *ngIf="!endGameFlag else message">
+    <!-- Компонент врага -->
+    <div class="enemy__wrapper" (click)="attack()">
+        <app-enemy></app-enemy>
+    </div>
+  </div>
+
+  <ng-template #message>
+      <div class="end-game">
+        <!--  TODO переделать логику с сообщением о победе или поражении  -->
+        <h1>{{gameStore.heroHealth.value > 0 ? 'You win!' : 'You are dead!'}}</h1>
+      </div>
+  </ng-template>
 </div>
 
-<div class="info">
-  <div class="info__panel left">
-    <div class="info__element hero-health">{{ hero.healthPoint }}</div>
-    <div class="info__element hero-weapon">{{ hero.getWeaponName() }} : {{hero.getWeaponDamage()}}</div>
-    <div class="info__element hero-active_buff">{{ hero.activeBuff }}</div>
-  </div>
-
-
-  <div class="info__panel left center">
-    <div class="info__element hero-bag active">
-      <ul>
-        <ng-container *ngFor="let el of hero.bag">
-          <li
-            class="hero-bag__item"
-            *ngIf="el.use"
-            (click)="selectBuff(el)">
-            {{el.name}}
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-  </div>
-
-  <div class="info__panel right">
-    <div class="info__element hero-bag">
-      <ul>
-        <ng-container *ngFor="let el of hero.bag">
-          <li
-            class="hero-bag__item"
-            *ngIf="!el.use"
-            (click)="selectBuff(el)">
-            {{el.name}}
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-  </div>
+<!-- Компонент панели героя -->
+<div class="info__wrapper">
+  <app-info
+    (selectBuff)="selectBuff($event)">
+  </app-info>
 </div>
