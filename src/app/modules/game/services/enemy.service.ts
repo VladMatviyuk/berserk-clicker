@@ -20,13 +20,13 @@ export class EnemyService {
     {id: 1, name: 'Enemy 1', avatar: '1', health: 10, damage: 1, attackSpeed: 1000},
     {id: 2,name: 'Enemy 2', avatar: '2', health: 20, damage: 5, attackSpeed: 5000},
     {id: 3,name: 'Enemy 3', avatar: '3', health: 30, damage: 2, attackSpeed: 2000},
-    {id: 4,name: 'Enemy 4', avatar: '4', health: 1, damage: 3, attackSpeed: 2000},
-    {id: 5,name: 'Enemy 5', avatar: '5', health: 1, damage: 4, attackSpeed: 2000},
-    {id: 6,name: 'Enemy 6', avatar: '6', health: 10, damage: 1, attackSpeed: 2000},
-    {id: 7,name: 'Enemy 7', avatar: '7', health: 10, damage: 1, attackSpeed: 2000},
-    {id: 8,name: 'Enemy 8', avatar: '8', health: 10, damage: 1, attackSpeed: 3000},
-    {id: 9,name: 'Enemy 9', avatar: '9', health: 10, damage: 1, attackSpeed: 1000},
-    {id: 10,name: 'Enemy 10', avatar: '10', health: 10, damage: 1, attackSpeed: 1000}
+    {id: 4,name: 'Enemy 4', avatar: '4', health: 40, damage: 3, attackSpeed: 2000},
+    {id: 5,name: 'Enemy 5', avatar: '5', health: 50, damage: 4, attackSpeed: 2000},
+    {id: 6,name: 'Enemy 6', avatar: '6', health: 60, damage: 1, attackSpeed: 2000},
+    {id: 7,name: 'Enemy 7', avatar: '7', health: 70, damage: 1, attackSpeed: 2000},
+    {id: 8,name: 'Enemy 8', avatar: '8', health: 80, damage: 1, attackSpeed: 3000},
+    {id: 9,name: 'Enemy 9', avatar: '9', health: 90, damage: 1, attackSpeed: 1000},
+    {id: 10,name: 'Enemy 10', avatar: '10', health: 100, damage: 1, attackSpeed: 1000}
   ];
 
   /** Список врагов */
@@ -34,7 +34,11 @@ export class EnemyService {
 
   /** Активный враг */
   public enemy: IEnemy = this.enemyList[0];
-  constructor(public hero: HeroService, public gameStore: GameStore) { }
+  constructor(
+    public hero: HeroService,
+    public gameStore: GameStore
+  ) {
+  }
 
   /** Получение врага  */
   public getEnemy(): void {
@@ -51,6 +55,10 @@ export class EnemyService {
 
   /** Урок по врагу  */
   public damage() {
+    if(this.gameStore.blockDamage.value) {
+      return;
+    }
+
     this.enemy.health -= this.hero.getWeaponDamage();
     if(this.enemy.health <= 0) {
       this.unsubAttack();
@@ -73,7 +81,26 @@ export class EnemyService {
 
   public setAttack() {
     this.attack = interval(this.enemy.attackSpeed);
-    this.attackSub = this.attack.subscribe(() => this.hero.getDamage(this.enemy.damage));
+    this.attackSub = this.attack.subscribe(() => this.heroAttack());
+  }
+
+  private heroAttack() {
+    this.showAttack();
+    setTimeout(() => {
+      this.hero.getDamage(this.enemy.damage);
+      this.hideAttack();
+    }, this.enemy.attackSpeed - (this.enemy.attackSpeed / 2))
+  }
+
+  private showAttack() {
+    const attack = document.createElement('div');
+    attack.className = 'attack';
+    document.body.appendChild(attack);
+  }
+
+  private hideAttack() {
+    const attack = document.querySelector('.attack');
+    attack?.remove()
   }
 
   public unsubAttack() {

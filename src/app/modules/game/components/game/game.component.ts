@@ -106,7 +106,7 @@ export class GameComponent implements OnInit, OnDestroy {
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     if(event.code == 'KeyA' || event.code == 'KeyD') {
-      this.hero.blockDamage.next(true);
+      this.gameStore.blockDamage.next(true);
     }
   }
 
@@ -115,6 +115,6 @@ export class GameComponent implements OnInit, OnDestroy {
    */
   @HostListener('window:keyup', ['$event'])
   onKeyUp() {
-    this.hero.blockDamage.next(false);
+    this.gameStore.blockDamage.next(false);
   }
 }

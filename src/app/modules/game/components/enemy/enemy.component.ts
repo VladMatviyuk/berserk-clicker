@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { EnemyService } from "../../services/enemy.service";
+import { GameStore } from "../../game.store";
 
 @Component({
   selector: 'app-enemy',
@@ -8,6 +9,9 @@ import { EnemyService } from "../../services/enemy.service";
 })
 export class EnemyComponent {
 
-  constructor(public enemyService: EnemyService) { }
+  constructor(
+    public enemyService: EnemyService,
+    public gameStore: GameStore
+  ) { }
 
 }

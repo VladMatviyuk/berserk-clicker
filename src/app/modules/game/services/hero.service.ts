@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
 import { IBagItem } from "../models/IBag";
 import { BagService } from "./bag.service";
 import { GameStore } from "../game.store";
@@ -8,10 +8,10 @@ import { BehaviorSubject } from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-export class HeroService {
+export class HeroService implements OnInit, OnDestroy{
 
   public healthPoint = this.gameStore.heroHealth.value;
-  public blockDamage: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  // public blockDamage: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public weapon  = [
     {name: 'stick', avatar: '', damage: 5 }
@@ -26,6 +26,14 @@ export class HeroService {
     public gameStore: GameStore
   ) {
     this.bag = bagService.get();
+  }
+
+  ngOnInit() {
+    this.gameStore.blockDamage.subscribe();
+  }
+
+  ngOnDestroy() {
+    this.gameStore.blockDamage.unsubscribe();
   }
 
   private actualWeapon() {
@@ -76,8 +84,7 @@ export class HeroService {
   }
 
   getDamage(damage: number) {
-    if(this.blockDamage.value) { return; }
-
+    if(this.gameStore.blockDamage.value) { return; }
     this.gameStore.heroHealth.next(this.gameStore.heroHealth.value - damage)
   }
 }

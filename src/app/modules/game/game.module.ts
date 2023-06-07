@@ -11,7 +11,7 @@ import { GameStore } from "./game.store";
   declarations: [
     GameComponent,
     EnemyComponent,
-    InfoComponent
+    InfoComponent,
   ],
   imports: [
     CommonModule

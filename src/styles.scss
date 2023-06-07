@@ -5,3 +5,21 @@
   box-sizing: border-box;
   user-select: none;
 }
+
+.enemy {
+  cursor: url('./assets/base-sword.png'), pointer;
+}
+
+.enemy__block-attack {
+  cursor: url('./assets/block-sword.png'), auto;
+}
+
+
+.attack {
+  width: 50px;
+  height: 50px;
+  background: darkred;
+  position: fixed;
+  top: calc(100% - 70%);
+  left: 23%;
+}
