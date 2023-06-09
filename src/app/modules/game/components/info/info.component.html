@@ -1,8 +1,9 @@
 <!-- TODO разбить на отдельные шаблоны -->
 <div class="info">
   <div class="info__panel left">
-    <div class="info__element hero-health">{{ gameStore.heroHealth.value }}</div>
-    <div class="info__element hero-weapon">{{ hero.getWeaponName() }} : {{hero.getWeaponDamage()}}</div>
+    <div class="info__element hero-health">{{ gameStore.heroHealth.value > 0? gameStore.heroHealth.value : 0}}</div>
+    <div class="info__element hero-weapon">{{ hero.getWeaponName() }} : {{hero.getWeaponDamage()}} : {{hero.getActiveWeapon().strength}}</div>
+    <div class="info__element hero-weapon">{{ enemyService.countDead }}</div>
     <div class="info__element hero-active_buff">{{ hero.activeBuff }}</div>
   </div>
 
@@ -28,7 +29,12 @@
             class="hero-bag__item"
             *ngIf="!el.use"
             (click)="useBuff(el)">
-            {{el.name}}
+            <div class="item__name">
+              {{el.name}}
+            </div>
+            <div class="item__use">
+              {{el.hotKey | currentKey}}
+            </div>
           </li>
         </ng-container>
       </ul>

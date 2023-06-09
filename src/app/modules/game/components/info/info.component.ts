@@ -4,6 +4,7 @@ import { Output, EventEmitter } from '@angular/core';
 import { HeroService } from "../../services/hero.service";
 import type { IBagItem } from "../../models/IBag";
 import { GameStore } from "../../game.store";
+import { EnemyService } from "../../services/enemy.service";
 
 @Component({
   selector: 'app-info',
@@ -12,7 +13,9 @@ import { GameStore } from "../../game.store";
 })
 export class InfoComponent {
 
-  constructor(public hero: HeroService, public gameStore: GameStore) { }
+  constructor(public hero: HeroService,
+              public gameStore: GameStore,
+              public enemyService: EnemyService) { }
 
   // public heroHealth = this.gameStore.heroHealth.value
   @Output() selectBuff = new EventEmitter<IBagItem>()

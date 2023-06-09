@@ -1,32 +1,32 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, interval, Subscription } from "rxjs";
 import { IEnemy } from "../models/IEnemy";
-import { GameService } from "./game.service";
 import { HeroService } from "./hero.service";
 import { GameStore } from "../game.store";
+import { VisualEffectsService } from "./visual-effects.service";
+import { IVisualEffectOptions } from "../models/IVisualEffect";
+import { getRandom } from "../utils/random";
+import { BagService } from "./bag.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnemyService {
-  /** Идентификатор активного врага */
-  private faceToFaceEnemy: number = 1;
-
   private attack: any;
   private attackSub: Subscription;
 
+  public countDead = 0;
+  private maxCountDead = 100;
+
+
+  /** Идентификатор активного врага */
+  private enemyId = 1;
+  private enemiesName = ['Chort', 'Voyaka', 'Boss', 'EasyBoy', 'Lupa', 'Pupa'];
+
   /** Список врагов */
   private enemyList: IEnemy[] = [
-    {id: 1, name: 'Enemy 1', avatar: '1', health: 10, damage: 1, attackSpeed: 1000},
-    {id: 2,name: 'Enemy 2', avatar: '2', health: 20, damage: 5, attackSpeed: 5000},
-    {id: 3,name: 'Enemy 3', avatar: '3', health: 30, damage: 2, attackSpeed: 2000},
-    {id: 4,name: 'Enemy 4', avatar: '4', health: 40, damage: 3, attackSpeed: 2000},
-    {id: 5,name: 'Enemy 5', avatar: '5', health: 50, damage: 4, attackSpeed: 2000},
-    {id: 6,name: 'Enemy 6', avatar: '6', health: 60, damage: 1, attackSpeed: 2000},
-    {id: 7,name: 'Enemy 7', avatar: '7', health: 70, damage: 1, attackSpeed: 2000},
-    {id: 8,name: 'Enemy 8', avatar: '8', health: 80, damage: 1, attackSpeed: 3000},
-    {id: 9,name: 'Enemy 9', avatar: '9', health: 90, damage: 1, attackSpeed: 1000},
-    {id: 10,name: 'Enemy 10', avatar: '10', health: 100, damage: 1, attackSpeed: 1000}
+    {id: 1, name: 'Enemy 1', avatar: '1', health: 10, damage: 1, attackSpeed: 3000},
+    {id: 2, name: 'Enemy 2', avatar: '1', health: 10, damage: 1, attackSpeed: 3000},
   ];
 
   /** Список врагов */
@@ -34,19 +34,36 @@ export class EnemyService {
 
   /** Активный враг */
   public enemy: IEnemy = this.enemyList[0];
+
   constructor(
     public hero: HeroService,
-    public gameStore: GameStore
-  ) {
-  }
+    public gameStore: GameStore,
+    public effect: VisualEffectsService,
+    private bag: BagService
+  ) { }
 
   /** Получение врага  */
   public getEnemy(): void {
-    this.enemySource.next(this.enemyList.find(en => en.id === this.faceToFaceEnemy) || this.enemyList[-1]);
+    this.generateEnemy();
+    this.switchEnemyId();
+    this.enemySource.next(this.enemyList.find(en => en.id === this.enemyId) || this.enemyList[-1]);
     // TODO логика конца игры
-    if(!this.enemySource.value) {
+    if(!this.enemySource.value || this.countDead === this.maxCountDead) {
       this.gameStore.allEnemiesDie.next(true);
       return
+    }
+
+    // Увеличиваем счетчик убитых врагов
+    this.countDead++;
+
+    // Получаем бафф
+    if(this.countDead % 2 === 0) {
+      this.bag.generate();
+    }
+
+    // Получаем новое оружие
+    if(this.countDead % 15 === 0) {
+      this.hero.getNewWeapon();
     }
 
     this.enemy = this.enemySource.value;
@@ -64,19 +81,33 @@ export class EnemyService {
       this.unsubAttack();
       this.attack = null;
 
-      this.next();
       this.getEnemy();
     }
   }
 
-  /** Изменение идентификатора врага  */
-  public next() {
-    this.faceToFaceEnemy++;
+  // TODO рефакторинг логики автоматической генерации противника
+  public generateEnemy() {
+    let id = this.enemyId == 1 ? 0 : 1;
+    this.enemyList[id] = {
+      id: id == 1 ? 2 : 1,
+      name: this.getEnemyName(),
+      avatar: '1',
+      health: this.getRandomInt(100),
+      damage: this.getRandomInt(40),
+      attackSpeed: 2500
+    };
   }
 
-  // TODO придумать логику автоматической генерации противника
-  public generateEnemy() {
+  public switchEnemyId() {
+    this.enemyId = this.enemyId == 1 ? 2 : 1;
+  }
 
+  private getEnemyName(): string {
+    return this.enemiesName[this.getRandomInt(this.enemiesName.length)]
+  }
+
+  private getRandomInt(val: number): number {
+    return Math.floor(Math.random() * val);
   }
 
   public setAttack() {
@@ -87,20 +118,24 @@ export class EnemyService {
   private heroAttack() {
     this.showAttack();
     setTimeout(() => {
-      this.hero.getDamage(this.enemy.damage);
-      this.hideAttack();
-    }, this.enemy.attackSpeed - (this.enemy.attackSpeed / 2))
+        this.hero.getDamage(this.enemy.damage);
+    }, 500)
   }
 
   private showAttack() {
-    const attack = document.createElement('div');
-    attack.className = 'attack';
-    document.body.appendChild(attack);
-  }
+    // TODO refactor
+    const rand = getRandom();
+    const attackSide =  rand > 0.5 ? 'attack__left' : 'attack__right';
+    // Формирование опций для эффекта предупреждения об атаке
+    const effectOptions: IVisualEffectOptions = {
+      element: 'div',
+      class: ['attack', attackSide],
+      parentSelector: '.enemy__wrapper',
+      autoRemove: true
+    }
 
-  private hideAttack() {
-    const attack = document.querySelector('.attack');
-    attack?.remove()
+    // Генерация предупреждения об атаке
+    this.effect.generateEffect(effectOptions);
   }
 
   public unsubAttack() {

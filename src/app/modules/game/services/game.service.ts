@@ -20,12 +20,14 @@ export class GameService {
   */
   public damage() {
     this.enemyService.damage();
+    this.hero.weaponBroken()
   }
 
   /**
    * Использование бафов
    */
   public useBuff(el: IBagItem) {
+    debugger
     this.hero.useBuff(el);
   }
 }

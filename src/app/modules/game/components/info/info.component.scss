@@ -27,6 +27,21 @@
 
     &__item {
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
+  }
+}
+
+.item {
+
+  &__name {
+    font-size: 1rem;
+  }
+
+  &__use {
+    font-size: 0.8rem;
   }
 }

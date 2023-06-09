@@ -10,6 +10,9 @@
       <div class="end-game">
         <!--  TODO переделать логику с сообщением о победе или поражении  -->
         <h1>{{gameStore.heroHealth.value > 0 ? 'You win!' : 'You are dead!'}}</h1>
+        <div>
+          <h1>Click count: {{clickCount}}</h1>
+        </div>
       </div>
   </ng-template>
 </div>
