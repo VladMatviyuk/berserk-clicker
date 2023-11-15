@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Output, EventEmitter } from '@angular/core';
 
 import { HeroService } from "../../services/hero.service";
 import type { IBagItem } from "../../models/IBag";
-import { GameStore } from "../../game.store";
+import { GameStore } from "../../../../game.store";
 import { EnemyService } from "../../services/enemy.service";
 
 @Component({

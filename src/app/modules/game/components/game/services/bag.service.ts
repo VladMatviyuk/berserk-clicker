@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BUFF_TYPES, IBagItem } from "../models/IBag";
-import { getRandom, getRandomMinMAx } from "../utils/random";
+import { getRandom, getRandomMinMAx } from "../../../utils/random";
 
 @Injectable({
   providedIn: 'root'

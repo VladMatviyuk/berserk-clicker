@@ -4,11 +4,16 @@
   padding: 0;
   box-sizing: border-box;
   user-select: none;
+
+  font-family: 'Crimson Text', serif;
 }
 
 body {
-  //background-image: url('./assets/firstBg.jpg');
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .enemy {
   cursor: url('./assets/base-sword.png'), pointer;

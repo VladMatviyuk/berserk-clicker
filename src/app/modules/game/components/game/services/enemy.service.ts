@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, interval, Subscription } from "rxjs";
 import { IEnemy } from "../models/IEnemy";
 import { HeroService } from "./hero.service";
-import { GameStore } from "../game.store";
+import { GameStore } from "../../../game.store";
 import { VisualEffectsService } from "./visual-effects.service";
 import { IVisualEffectOptions } from "../models/IVisualEffect";
-import { getRandom } from "../utils/random";
+import { getRandom } from "../../../utils/random";
 import { BagService } from "./bag.service";
 
 @Injectable({

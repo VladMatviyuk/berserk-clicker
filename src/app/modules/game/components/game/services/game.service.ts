@@ -27,7 +27,6 @@ export class GameService {
    * Использование бафов
    */
   public useBuff(el: IBagItem) {
-    debugger
     this.hero.useBuff(el);
   }
 }

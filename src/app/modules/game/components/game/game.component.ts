@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { GameService } from "../../services/game.service";
+import { GameService } from "./services/game.service";
 
-import type { IBagItem } from "../../models/IBag";
+import type { IBagItem } from "./models/IBag";
 import { GameStore } from "../../game.store";
-import { EnemyService } from "../../services/enemy.service";
-import { HeroService } from "../../services/hero.service";
-import { BagService } from "../../services/bag.service";
+import { EnemyService } from "./services/enemy.service";
+import { HeroService } from "./services/hero.service";
+import { BagService } from "./services/bag.service";
 
 // TODO - done продумать и сделать логику получения урона
 // TODO - done реализовать логику смерти и смены врага
@@ -109,7 +109,6 @@ export class GameComponent implements OnInit, OnDestroy {
    */
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    debugger
     if(event.code == 'KeyA' || event.code == 'KeyD') {
       this.gameStore.blockDamage.next(true);
     }

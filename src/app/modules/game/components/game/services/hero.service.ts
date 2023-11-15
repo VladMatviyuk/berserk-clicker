@@ -1,12 +1,11 @@
 import { Injectable, OnInit, OnDestroy } from '@angular/core';
 import { IBagItem } from "../models/IBag";
 import { BagService } from "./bag.service";
-import { GameStore } from "../game.store";
-import { BehaviorSubject } from "rxjs";
+import { GameStore } from "../../../game.store";
 import { IVisualEffectOptions } from "../models/IVisualEffect";
 import { VisualEffectsService } from "./visual-effects.service";
 import { IWeapon } from "../models/IWeapon";
-import { getRandomMinMAx } from "../utils/random";
+import { getRandomMinMAx } from "../../../utils/random";
 
 
 @Injectable({
@@ -75,7 +74,6 @@ export class HeroService implements OnInit, OnDestroy{
       weapon.strength--;
     } else {
       if(this.weapon.length > 1) {
-        debugger
         this.weapon.splice(-1);
         this.getActiveWeapon()
       }
@@ -107,7 +105,6 @@ export class HeroService implements OnInit, OnDestroy{
         break;
     }
 
-    debugger
     this.bagService.remove(el);
     this.bag = this.bagService.get();
 

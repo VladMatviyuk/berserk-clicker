@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EnemyService } from "../../services/enemy.service";
-import { GameStore } from "../../game.store";
+import { GameStore } from "../../../../game.store";
 
 @Component({
   selector: 'app-enemy',

@@ -1,4 +1,4 @@
-import { Injectable, Renderer2 ,RendererFactory2 } from '@angular/core';
+import {Injectable, Renderer2, RendererFactory2} from '@angular/core';
 import { IVisualEffectOptions } from "../models/IVisualEffect";
 
 
@@ -6,10 +6,13 @@ import { IVisualEffectOptions } from "../models/IVisualEffect";
   providedIn: 'root'
 })
 export class VisualEffectsService {
+  private REMOVE_SPEED = 500;
+
   private render: Renderer2;
 
   constructor(private rendererFactory: RendererFactory2) {
-    this.render = rendererFactory.createRenderer(null, null);
+    this.render = this.rendererFactory.createRenderer(null, null);
+
   }
 
   /**
@@ -46,7 +49,7 @@ export class VisualEffectsService {
   private autoRemove(options: IVisualEffectOptions, ref: any) {
     setTimeout(() => {
       this.remove(options, ref)
-    }, options.removeSpeed || 500)
+    }, options.removeSpeed || this.REMOVE_SPEED)
   }
 
   /**
